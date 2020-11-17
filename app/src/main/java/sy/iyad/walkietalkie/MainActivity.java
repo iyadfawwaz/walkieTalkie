@@ -26,11 +26,9 @@ import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-
 import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.google.android.gms.nearby.connection.Payload;
 import com.google.android.gms.nearby.connection.Strategy;
-
 import java.io.IOException;
 import java.util.Random;
 
@@ -145,10 +143,10 @@ public class MainActivity extends ConnectionsActivity {
         getSupportActionBar()
                 .setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.actionBar));
 
-        mPreviousStateView = (TextView) findViewById(R.id.previous_state);
-        mCurrentStateView = (TextView) findViewById(R.id.current_state);
+        mPreviousStateView =  findViewById(R.id.previous_state);
+        mCurrentStateView =  findViewById(R.id.current_state);
 
-        mDebugLogView = (TextView) findViewById(R.id.debug_log);
+        mDebugLogView =  findViewById(R.id.debug_log);
         mDebugLogView.setVisibility(DEBUG ? View.VISIBLE : View.GONE);
         mDebugLogView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -272,7 +270,9 @@ public class MainActivity extends ConnectionsActivity {
         logD("State set to " + state);
         State oldState = mState;
         mState = state;
-        onStateChanged(oldState, state);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            onStateChanged(oldState, state);
+        }
     }
 
     /** @return The current state. */
@@ -602,12 +602,12 @@ public class MainActivity extends ConnectionsActivity {
     }
 
     private static String generateRandomName() {
-        String name = "";
+        StringBuilder name = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
-            name += random.nextInt(10);
+            name.append(random.nextInt(10));
         }
-        return name;
+        return name.toString();
     }
 
     /**
